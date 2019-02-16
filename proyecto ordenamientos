@@ -1,0 +1,91 @@
+package com.company;
+
+
+import java.util.Random;
+
+public class Main {
+
+    public static void main(String[] args) {
+	// write your code here
+       int [] arreglo = new int[500000];
+        Random rnd = new Random();
+        for (int i = 0; i < arreglo.length; i++) {
+            arreglo[i] = rnd.nextInt(99999-10000+1)+10000;
+        }
+        //int[] arreglo = {3,6,2,9,3,7,23,8,13,67,5,22,1};
+        long inicio = System.currentTimeMillis();
+        //Para probar con un método poner como comentario el otro
+        arreglo = mergesort(arreglo);
+        //arreglo = bubbleSort(arreglo);
+        long fin = System.currentTimeMillis();
+        long tiempo = (fin-inicio);
+        System.out.println(tiempo+" milisegundos");
+
+
+        for (int i = 0; i < arreglo.length; i++){
+            System.out.print(arreglo[i]+", ");
+        }
+    }
+
+
+    public static int[] bubbleSort(int[] arr){
+        for(int i = 0; i < arr.length; i++){
+            for(int j = 0; j < arr.length; j++) {
+                if(arr[i]< arr[j]){
+                    int temp = arr[i];
+                    arr[i] = arr[j];
+                    arr[j] = temp;
+                }
+            }
+        }
+        return arr;
+    }
+    public static int[] mergesort(int[] arr){
+        //caso base
+        if(arr.length <= 1){
+            return arr;
+        }
+
+
+        //caso recursivo
+
+        int medio = arr.length /2;
+
+        int[] inferior = new int[medio];
+        int[] superior = new int[arr.length - medio];
+        for (int i = 0; i < medio; i++){
+            inferior[i] = arr[i];
+        }
+
+        for(int i = 0; i < superior.length ; i++){
+            superior[i] = arr[i + inferior.length];
+        }
+
+        return merge(mergesort(inferior), mergesort(superior));
+
+    }
+
+    public static int[] merge(int [] a, int[] b){
+        int[] retval = new int[a.length+ b.length];
+        int i = 0;
+        int j = 0;
+        int k = 0;
+        while (j < a.length && k < b.length){
+            if(a[j] < b[k]) {
+                retval[i++] = a[j++];
+            } else{
+                retval[i++] = b[k++];
+            }
+        }
+        if(j < a.length){
+            while(j < a.length){
+                retval[i++]= a[j++];
+            }
+        } else if(k < b.length){
+            while(k < b.length){
+                retval[i++] = b[k++];
+            }
+        }
+        return retval;
+    }
+}
